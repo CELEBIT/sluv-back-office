@@ -1,4 +1,4 @@
-package com.sulv.backoffice.global.config.security;
+package com.sluv.backoffice.global.config.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

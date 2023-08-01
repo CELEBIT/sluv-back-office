@@ -1,4 +1,4 @@
-package com.sulv.backoffice.global.config;
+package com.sluv.backoffice.global.config;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
