@@ -1,7 +1,7 @@
 package com.sluv.backoffice.domain.celeb.repository;
 
-import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
+import com.sluv.backoffice.domain.celeb.entity.Celeb;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface CelebRepository extends JpaRepository<KafkaProperties.Admin, Long> {
+public interface CelebRepository extends JpaRepository<Celeb, Long> {
 }

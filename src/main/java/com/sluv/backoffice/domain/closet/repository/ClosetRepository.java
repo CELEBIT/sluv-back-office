@@ -1,7 +1,7 @@
 package com.sluv.backoffice.domain.closet.repository;
 
-import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
+import com.sluv.backoffice.domain.closet.entity.Closet;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ClosetRepository extends JpaRepository<KafkaProperties.Admin, Long> {
+public interface ClosetRepository extends JpaRepository<Closet, Long> {
 }

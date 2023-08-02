@@ -1,7 +1,7 @@
 package com.sluv.backoffice.domain.user.repository;
 
-import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
+import com.sluv.backoffice.domain.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<KafkaProperties.Admin, Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
 }

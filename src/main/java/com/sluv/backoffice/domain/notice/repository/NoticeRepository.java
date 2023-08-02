@@ -1,7 +1,7 @@
 package com.sluv.backoffice.domain.notice.repository;
 
-import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
+import com.sluv.backoffice.domain.notice.entity.Notice;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface NoticeRepository extends JpaRepository<KafkaProperties.Admin, Long> {
+public interface NoticeRepository extends JpaRepository<Notice, Long> {
 }
