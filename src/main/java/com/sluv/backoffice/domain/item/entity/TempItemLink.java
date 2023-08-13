@@ -36,6 +36,6 @@ public class TempItemLink extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(length = 45, columnDefinition = "varchar(45) default 'ACTIVE'")
-    private ItemImgOrLinkStatus itemImgOrLinkStatus = ItemImgOrLinkStatus.ACTIVE;
+    private ItemImgOrLinkStatus itemImgOrLinkStatus;
 
 }

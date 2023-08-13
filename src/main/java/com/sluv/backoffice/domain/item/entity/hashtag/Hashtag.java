@@ -8,10 +8,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicInsert;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@DynamicInsert
 @Builder
 @Getter
 @Table(name = "hashtag")
@@ -26,7 +28,8 @@ public class Hashtag extends BaseEntity {
     private String content;
 
     @Enumerated(EnumType.STRING)
-    private HashtagStatus hashtagStatus = HashtagStatus.ACTIVE;
+    @Column(length = 45, columnDefinition = "varchar(45) default 'ACTIVE'")
+    private HashtagStatus hashtagStatus;
     public void changeStatus(HashtagStatus status){
         this.hashtagStatus = status;
     }

@@ -51,5 +51,5 @@ public class Celeb extends BaseEntity {
     private CelebStatus celebStatus;
 
     @OneToMany(mappedBy = "parent")
-    private List<Celeb> subCelebList = new ArrayList<>();
+    private List<Celeb> subCelebList;
 }
