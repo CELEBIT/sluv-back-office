@@ -1,8 +1,6 @@
 
 # sluv-back-office
-<div align="center">
-  
-</div>
+
 
 
 <div align="center">
