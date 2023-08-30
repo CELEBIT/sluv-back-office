@@ -1,7 +1,7 @@
 
 # sluv-back-office
 <div align="center">
-  <img width="188" alt="스크린샷 2023-08-01 오후 12 57 27" src="https://github.com/CELEBIT/sluv-back-office/assets/101792740/adceba98-09c0-4edd-bb4f-147d58ddc9bd">
+  
 </div>
 
 
