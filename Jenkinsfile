@@ -10,6 +10,7 @@ pipeline {
             steps {
                 script {
                     println("************[App Build]************")
+                    sh("./gradlew clean build")
 
                 }
             }
