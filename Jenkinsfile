@@ -28,6 +28,19 @@ pipeline {
             }
         }
 
+        stage("AWS Configuration") {
+            steps {
+                withCredentials([[
+                    $class: 'AmazonWebServicesCredentialsBinding',
+                    credentialsId: 'aws-sluv-back-office',
+                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                    secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                ]]) {
+                    sh 'aws s3 ls'
+                }
+            }
+        }
+
         stage("[DEV] Checkout") {
             steps {
                 echo "[DEV] Checkout"
@@ -46,6 +59,7 @@ pipeline {
         stage("[DEV] Docker Build") {
             steps {
                 echo "[DEV] Docker Build"
+                sh "ls -al build/libs"
 
             }
         }
