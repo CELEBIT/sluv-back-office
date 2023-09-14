@@ -28,19 +28,6 @@ pipeline {
             }
         }
 
-        stage("AWS Configuration") {
-            steps {
-                withCredentials([[
-                    $class: 'AmazonWebServicesCredentialsBinding',
-                    credentialsId: 'aws-sluv-back-office',
-                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-                    secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
-                ]]) {
-                    sh 'aws s3 ls'
-                }
-            }
-        }
-
         stage("[DEV] Checkout") {
             steps {
                 echo "[DEV] Checkout"
@@ -60,15 +47,23 @@ pipeline {
             steps {
                 echo "[DEV] Docker Build"
                 sh "ls -al build/libs"
-                sh "aws ecr get-login-password --region ${ECR_REGION}"
-                sh "docker login --username AWS --password-stdin ${ECR_URL}"
-                sh "docker build -t ${IMAGE_NAME}:${VERSION} ."
-                sh "docker tag ${IMAGE_NAME}:${VERSION} ${ECR_URL}/${IMAGE_NAME}:${VERSION}"
-                sh "docker tag ${IMAGE_NAME}:${VERSION} ${ECR_URL}/${IMAGE_NAME}:latest"
 
-                echo "[DEV] Docker Build - docker image to ECR push"
-                sh "docker push ${ECR_URL}/${IMAGE_NAME}:${VERSION}"
-                sh "docker push ${ECR_URL}/${IMAGE_NAME}:latest"
+                withCredentials([[
+                    $class: 'AmazonWebServicesCredentialsBinding',
+                    credentialsId: 'aws-sluv-back-office',
+                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                    secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                ]]) {
+                    sh "aws ecr get-login-password --region ${ECR_REGION}"
+                    sh "docker login --username AWS --password-stdin ${ECR_URL}"
+                    sh "docker build -t ${IMAGE_NAME}:${VERSION} ."
+                    sh "docker tag ${IMAGE_NAME}:${VERSION} ${ECR_URL}/${IMAGE_NAME}:${VERSION}"
+                    sh "docker tag ${IMAGE_NAME}:${VERSION} ${ECR_URL}/${IMAGE_NAME}:latest"
+
+                    echo "[DEV] Docker Build - docker image to ECR push"
+                    sh "docker push ${ECR_URL}/${IMAGE_NAME}:${VERSION}"
+                    sh "docker push ${ECR_URL}/${IMAGE_NAME}:latest"
+                }
             }
         }
 
