@@ -88,9 +88,9 @@ pipeline {
                         secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
                     ]]) {
                         step([$class: 'AWSCodeDeployPublisher',
-                            applicationName: ${APP_NAME},
-                            awsAccessKey: ${AWS_ACCESS_KEY_ID},
-                            awsSecretKey: ${AWS_SECRET_ACCESS_KEY},
+                            applicationName: "${APP_NAME}",
+                            awsAccessKey: "${AWS_ACCESS_KEY_ID}",
+                            awsSecretKey: "${AWS_SECRET_ACCESS_KEY}",
                             credentials: 'awsAccessKey',
                             deploymentConfig: 'CodeDeployDefault.OneAtATime',
                             deploymentGroupAppspec: false,
@@ -101,8 +101,8 @@ pipeline {
                             includes: '**',
                             proxyHost: '',
                             proxyPort: 0,
-                            region: ${ECR_REGION},
-                            s3bucket: ${CODE_DEPLOY_S3_BUCKET_NAME},
+                            region: "${ECR_REGION}",
+                            s3bucket: "${CODE_DEPLOY_S3_BUCKET_NAME}",
                             s3prefix: '',
                             subdirectory: '',
                             versionFileName: '',
