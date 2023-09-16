@@ -103,7 +103,7 @@ pipeline {
                             proxyPort: 0,
                             region: "${ECR_REGION}",
                             s3bucket: "${CODE_DEPLOY_S3_BUCKET_NAME}",
-                            s3prefix: '',
+                            s3prefix: 'deploy',
                             subdirectory: '',
                             versionFileName: '',
                             waitForCompletion: true,
