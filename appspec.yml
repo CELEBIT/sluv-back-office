@@ -3,7 +3,7 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /home/ubuntu/deploy
+    destination: /
     runas: ubuntu
 hooks:
   AfterInstall:
