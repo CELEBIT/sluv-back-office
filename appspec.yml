@@ -4,6 +4,7 @@ os: linux
 files:
   - source: /
     destination: /deploy
+    runas: ubuntu
 hooks:
   AfterInstall:
     - location: scripts/pullDocker.sh
