@@ -9,3 +9,6 @@ if [ $container_count -gt 0 ]; then
 else
   echo "No running containers to stop."
 fi
+
+rm -rf /home/ubuntu/deploy/
+mkdir -p /home/ubuntu/deploy
