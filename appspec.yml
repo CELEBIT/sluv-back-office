@@ -8,13 +8,12 @@ permissions:
   - object: /
     pattern: "**"
     mode: 755
-    owner: ubuntu
-    group: ubuntu
+    owner: root
+    group: root
 hooks:
   BeforeInstall:
     - location: scripts/stopDocker.sh
       timeout: 300
-      runas: ubuntu
   AfterInstall:
     - location: scripts/pullDocker.sh
       timeout: 300
