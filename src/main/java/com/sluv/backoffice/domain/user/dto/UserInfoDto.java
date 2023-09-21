@@ -11,17 +11,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserInfoDto {
 
-    private String email;
     private String nickname;
     private String profileImgUrl;
     private UserStatus userStatus;
+    private Long waitingReportCount;
+    private Long reportStackCount;
 
-    public static UserInfoDto of(User user) {
+    public static UserInfoDto of(User user, Long waitingReportCount, Long reportStackCount) {
         return new UserInfoDto(
-                user.getEmail(),
                 user.getNickname(),
                 user.getProfileImgUrl(),
-                user.getUserStatus()
+                user.getUserStatus(),
+                waitingReportCount,
+                reportStackCount
         );
     }
 }
