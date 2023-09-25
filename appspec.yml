@@ -3,7 +3,7 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /
+    destination: /deploy
 permissions:
   - object: /
     pattern: "**"
