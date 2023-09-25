@@ -1,7 +1,7 @@
 if [ "$DEPLOYMENT_GROUP_NAME" == "dev" ]
 then
   # build images and run containers
-  docker run -d --name codedeploy -p 80:8080 sluv-back-office
+  sudo docker run -d --name codedeploy -p 80:8080 sluv-back-office
 fi
 #elif [ "$DEPLOYMENT_GROUP_NAME" == "stage" ]
 #then
