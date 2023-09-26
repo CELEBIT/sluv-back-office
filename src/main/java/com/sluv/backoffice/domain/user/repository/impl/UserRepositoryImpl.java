@@ -4,23 +4,21 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sluv.backoffice.domain.user.dto.UserInfoDto;
-import com.sluv.backoffice.domain.user.entity.QUser;
-import com.sluv.backoffice.domain.user.entity.QUserReport;
-import com.sluv.backoffice.domain.user.entity.QUserReportStack;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 
 import java.util.List;
+
+import static com.sluv.backoffice.domain.user.entity.QUser.*;
+import static com.sluv.backoffice.domain.user.entity.QUserReport.*;
+import static com.sluv.backoffice.domain.user.entity.QUserReportStack.*;
 
 @RequiredArgsConstructor
 public class UserRepositoryImpl implements UserRepositoryCustom{
 
     private final JPAQueryFactory jpaQueryFactory;
-    private final QUser user = QUser.user;
-    private final QUserReport userReport = QUserReport.userReport;
-    private final QUserReportStack userReportStack = QUserReportStack.userReportStack;
 
     @Override
     public Page<UserInfoDto> findAllUserInfo(Pageable pageable) {
@@ -43,8 +41,6 @@ public class UserRepositoryImpl implements UserRepositoryCustom{
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        long total = jpaQueryFactory.from(user).fetch().size();
-
-        return new PageImpl<>(content, pageable, total);
+        return PageableExecutionUtils.getPage(content, pageable, () -> jpaQueryFactory.from(user).fetch().size());
     }
 }
