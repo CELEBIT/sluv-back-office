@@ -26,7 +26,7 @@ public class UserController {
 
     @Operation(
             summary = "전체 유저 조회",
-            description = "모든 유저의 상태를 포함한 정보를 조회한다"
+            description = "모든 유저의 상태와 신고 수를 포함한 정보를 조회한다"
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "1000", description = "요청성공"),
