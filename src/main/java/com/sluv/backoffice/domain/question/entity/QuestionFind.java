@@ -2,10 +2,7 @@ package com.sluv.backoffice.domain.question.entity;
 
 import com.sluv.backoffice.domain.celeb.entity.Celeb;
 import com.sluv.backoffice.domain.celeb.entity.NewCeleb;
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,11 +16,11 @@ import lombok.NoArgsConstructor;
 @DiscriminatorValue("Find")
 public class QuestionFind extends Question{
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "celeb_id")
     private Celeb celeb;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "new_celeb_id")
     private NewCeleb newCeleb;
 
