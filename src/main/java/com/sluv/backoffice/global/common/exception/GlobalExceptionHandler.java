@@ -6,9 +6,9 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
-import static com.sluv.backoffice.global.common.exception.ErrorCode.DB_ACCESS_ERROR;
-import static com.sluv.backoffice.global.common.exception.ErrorCode.INTERNAL_SERVER_ERROR;
+import static com.sluv.backoffice.global.common.exception.ErrorCode.*;
 
 /*
  * Application 전역 Exception Handler
@@ -82,6 +82,26 @@ public class GlobalExceptionHandler {
                         .errorCode(DB_ACCESS_ERROR)
                         .build()
                 );
+    }
+
+    /**
+     * MethodArgumentTypeMismatch Exception
+     */
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ErrorResponse> methodArgumentTypeMismatch(MethodArgumentTypeMismatchException exception) {
+        log.error(
+                LOG_FORMAT,
+                "methodArgumentTypeMismatch",
+                exception.getClass().getSimpleName(),
+                exception.getMessage()
+        );
+
+        return ResponseEntity.badRequest().body(
+                ErrorResponse.customBuilder()
+                        .errorCode(INVALID_ARGUMENT)
+                        .build()
+        );
     }
 
     /**
