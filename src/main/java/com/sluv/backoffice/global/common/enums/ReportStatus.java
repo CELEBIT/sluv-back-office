@@ -5,5 +5,6 @@ package com.sluv.backoffice.global.common.enums;
  */
 public enum ReportStatus {
     WAITING,
-    COMPLETE
+    COMPLETED,
+    REJECTED
 }

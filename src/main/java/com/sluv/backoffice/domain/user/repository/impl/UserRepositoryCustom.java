@@ -6,5 +6,5 @@ import org.springframework.data.domain.Pageable;
 
 public interface UserRepositoryCustom {
 
-    Page<UserInfoDto> findAllUserInfo(Pageable pageable);
+    Page<UserInfoDto> getAllUserInfo(Pageable pageable);
 }
