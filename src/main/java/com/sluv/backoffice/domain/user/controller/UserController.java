@@ -49,7 +49,7 @@ public class UserController {
             @ApiResponse(responseCode = "5000", description = "서버내부 에러", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "5001", description = "DB 에러", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @PutMapping("/{userId}/status/{status}")
+    @PatchMapping("/{userId}/status/{status}")
     public ResponseEntity<SuccessResponse> updateUserStatus(@PathVariable Long userId, @PathVariable UserStatus status) {
         userService.updateUserStatus(userId, status);
         return ResponseEntity.ok().body(
