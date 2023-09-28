@@ -21,7 +21,7 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public PaginationResDto<UserInfoDto> getAllUserInfo(Pageable pageable) {
-        Page<UserInfoDto> users = userRepository.findAllUserInfo(pageable);
+        Page<UserInfoDto> users = userRepository.getAllUserInfo(pageable);
 
         return PaginationResDto.<UserInfoDto>builder()
                 .hasNext(users.hasNext())

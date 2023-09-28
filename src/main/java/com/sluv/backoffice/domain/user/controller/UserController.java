@@ -1,8 +1,11 @@
 package com.sluv.backoffice.domain.user.controller;
 
 import com.sluv.backoffice.domain.user.dto.UserInfoDto;
+import com.sluv.backoffice.domain.user.dto.UserReportInfoDto;
 import com.sluv.backoffice.domain.user.enums.UserStatus;
+import com.sluv.backoffice.domain.user.service.UserReportService;
 import com.sluv.backoffice.domain.user.service.UserService;
+import com.sluv.backoffice.global.common.enums.ReportStatus;
 import com.sluv.backoffice.global.common.response.ErrorResponse;
 import com.sluv.backoffice.global.common.response.PaginationResDto;
 import com.sluv.backoffice.global.common.response.SuccessDataResponse;
@@ -23,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
+    private final UserReportService userReportService;
 
     @Operation(
             summary = "전체 유저 조회",
@@ -55,5 +59,22 @@ public class UserController {
         return ResponseEntity.ok().body(
                 new SuccessResponse()
         );
+    }
+
+    @Operation(
+            summary = "유저 신고 정보 조회",
+            description = "WAITING, COMPLETED, REJECTED 로 검색 조건, 없으면 전체 검색"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "1000", description = "요청성공"),
+            @ApiResponse(responseCode = "5000", description = "서버내부 에러", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "5001", description = "DB 에러", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    @GetMapping("/report")
+    public ResponseEntity<SuccessDataResponse<PaginationResDto<UserReportInfoDto>>> getAllUserReport(Pageable pageable,
+                                                                                                     @RequestParam(required = false) ReportStatus reportStatus) {
+        return ResponseEntity.ok().body(SuccessDataResponse.<PaginationResDto<UserReportInfoDto>>builder()
+                .result(userReportService.getAllUserReport(pageable, reportStatus))
+                .build());
     }
 }

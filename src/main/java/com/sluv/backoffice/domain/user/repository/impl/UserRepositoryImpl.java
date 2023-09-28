@@ -4,6 +4,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sluv.backoffice.domain.user.dto.UserInfoDto;
+import com.sluv.backoffice.global.common.enums.ReportStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,7 +22,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom{
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Page<UserInfoDto> findAllUserInfo(Pageable pageable) {
+    public Page<UserInfoDto> getAllUserInfo(Pageable pageable) {
 
         List<UserInfoDto> content = jpaQueryFactory
                 .select(Projections.constructor(UserInfoDto.class,
@@ -30,7 +31,8 @@ public class UserRepositoryImpl implements UserRepositoryCustom{
                         user.userStatus,
                         JPAExpressions.select(userReport.reported.id.count())
                                 .from(userReport)
-                                .where(userReport.reported.id.eq(user.id)),
+                                .where(userReport.reported.id.eq(user.id)
+                                .and(userReport.reportStatus.stringValue().eq(ReportStatus.WAITING.name()))),
                         JPAExpressions.select(userReportStack.reported.id.count())
                                 .from(userReportStack)
                                 .where(userReportStack.reported.id.eq(user.id))
