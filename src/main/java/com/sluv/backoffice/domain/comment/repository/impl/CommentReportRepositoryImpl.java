@@ -46,9 +46,9 @@ public class CommentReportRepositoryImpl implements CommentReportRepositoryCusto
                 .from(commentReport)
                 .where(predicate)
                 .orderBy(commentReport.createdAt.desc())
+                .join(commentReport.comment,comment)
                 .join(commentReport.reporter, reporterUser)
                 .join(comment.user, reportedUser)
-                .join(commentReport.comment,comment)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
