@@ -65,10 +65,10 @@ public class CommentReportRepositoryImpl implements CommentReportRepositoryCusto
 
         CommentReportDetailDto detailDto = jpaQueryFactory
                 .select(Projections.constructor(CommentReportDetailDto.class,
-                        reporterUser.id,
-                        reporterUser.nickname,
-                        reportedUser.id,
-                        reportedUser.nickname,
+                        commentReport.reporter.id,
+                        commentReport.reporter.nickname,
+                        comment.user.id,
+                        comment.user.nickname,
                         commentReport.id,
                         commentReport.commentReportReason,
                         commentReport.content,
