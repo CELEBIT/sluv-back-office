@@ -3,7 +3,9 @@ package com.sluv.backoffice.domain.comment.repository.impl;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.sluv.backoffice.domain.comment.dto.CommentReportDetailDto;
 import com.sluv.backoffice.domain.comment.dto.CommentReportInfoDto;
+import com.sluv.backoffice.domain.comment.exception.CommentReportNotFoundException;
 import com.sluv.backoffice.domain.user.entity.QUser;
 import com.sluv.backoffice.global.common.enums.ReportStatus;
 import lombok.RequiredArgsConstructor;
@@ -54,5 +56,37 @@ public class CommentReportRepositoryImpl implements CommentReportRepositoryCusto
                 .fetch();
 
         return PageableExecutionUtils.getPage(content, pageable, () -> jpaQueryFactory.from(commentReport).fetch().size());
+    }
+
+    @Override
+    public CommentReportDetailDto getCommentReportDetail(Long commentReportId) {
+        QUser reporterUser = new QUser("reporterUser");
+        QUser reportedUser = new QUser("reportedUser");
+
+        CommentReportDetailDto detailDto = jpaQueryFactory
+                .select(Projections.constructor(CommentReportDetailDto.class,
+                        reporterUser.id,
+                        reporterUser.nickname,
+                        reportedUser.id,
+                        reportedUser.nickname,
+                        commentReport.id,
+                        commentReport.commentReportReason,
+                        commentReport.content,
+                        commentReport.reportStatus,
+                        comment.content,
+                        commentReport.createdAt,
+                        commentReport.updatedAt))
+                .from(commentReport)
+                .join(commentReport.comment, comment)
+                .join(commentReport.reporter, reporterUser)
+                .join(comment.user, reportedUser)
+                .where(commentReport.id.eq(commentReportId))
+                .fetchOne();
+
+        if (detailDto == null) {
+            throw new CommentReportNotFoundException();
+        }
+
+        return detailDto;
     }
 }
