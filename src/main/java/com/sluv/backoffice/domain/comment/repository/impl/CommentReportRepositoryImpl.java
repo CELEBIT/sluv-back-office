@@ -59,7 +59,7 @@ public class CommentReportRepositoryImpl implements CommentReportRepositoryCusto
     }
 
     @Override
-    public CommentReportDetailDto getCommentReportDetail(Long commentReportId) {
+    public Optional<CommentReportDetailDto> getCommentReportDetail(Long commentReportId) {
         CommentReportDetailDto detailDto = jpaQueryFactory
                 .select(Projections.constructor(CommentReportDetailDto.class,
                         commentReport.reporter.id,
@@ -80,7 +80,6 @@ public class CommentReportRepositoryImpl implements CommentReportRepositoryCusto
                 .where(commentReport.id.eq(commentReportId))
                 .fetchOne();
 
-        return Optional.ofNullable(detailDto)
-                .orElseThrow(CommentReportNotFoundException::new);
+        return Optional.ofNullable(detailDto);
     }
 }

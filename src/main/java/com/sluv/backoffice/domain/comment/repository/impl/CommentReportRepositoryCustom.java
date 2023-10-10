@@ -6,8 +6,10 @@ import com.sluv.backoffice.global.common.enums.ReportStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.Optional;
+
 public interface CommentReportRepositoryCustom {
     Page<CommentReportInfoDto> getAllCommentReport(Pageable pageable, ReportStatus reportStatus);
 
-    CommentReportDetailDto getCommentReportDetail(Long commentReportId);
+    Optional<CommentReportDetailDto> getCommentReportDetail(Long commentReportId);
 }
