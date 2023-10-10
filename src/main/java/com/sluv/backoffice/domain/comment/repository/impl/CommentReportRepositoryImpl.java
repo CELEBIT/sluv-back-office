@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.sluv.backoffice.domain.comment.entity.QComment.comment;
 import static com.sluv.backoffice.domain.comment.entity.QCommentReport.commentReport;
@@ -83,10 +84,7 @@ public class CommentReportRepositoryImpl implements CommentReportRepositoryCusto
                 .where(commentReport.id.eq(commentReportId))
                 .fetchOne();
 
-        if (detailDto == null) {
-            throw new CommentReportNotFoundException();
-        }
-
-        return detailDto;
+        return Optional.ofNullable(detailDto)
+                .orElseThrow(CommentReportNotFoundException::new);
     }
 }
