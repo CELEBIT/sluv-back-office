@@ -23,12 +23,11 @@ import static com.sluv.backoffice.domain.comment.entity.QCommentReport.commentRe
 public class CommentReportRepositoryImpl implements CommentReportRepositoryCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
+    private final QUser reporterUser = new QUser("reporterUser");
+    private final QUser reportedUser = new QUser("reportedUser");
 
     @Override
     public Page<CommentReportInfoDto> getAllCommentReport(Pageable pageable, ReportStatus reportStatus) {
-        QUser reporterUser = new QUser("reporterUser");
-        QUser reportedUser = new QUser("reportedUser");
-
         BooleanExpression predicate = commentReport.isNotNull();
         if(reportStatus != null) {
             predicate = predicate.and(commentReport.reportStatus.eq(reportStatus));
@@ -61,9 +60,6 @@ public class CommentReportRepositoryImpl implements CommentReportRepositoryCusto
 
     @Override
     public CommentReportDetailDto getCommentReportDetail(Long commentReportId) {
-        QUser reporterUser = new QUser("reporterUser");
-        QUser reportedUser = new QUser("reportedUser");
-
         CommentReportDetailDto detailDto = jpaQueryFactory
                 .select(Projections.constructor(CommentReportDetailDto.class,
                         commentReport.reporter.id,
