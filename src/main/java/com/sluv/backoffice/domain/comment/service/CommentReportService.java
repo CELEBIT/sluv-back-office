@@ -34,12 +34,8 @@ public class CommentReportService {
 
     @Transactional(readOnly = true)
     public CommentReportDetailDto getCommentReportDetail(Long commentReportId) {
-        Optional<CommentReportDetailDto> commentDetail = commentReportRepository.getCommentReportDetail(commentReportId);
-
-        if(commentDetail.isEmpty()) {
-            throw new CommentReportNotFoundException();
-        }
-        return commentDetail.get();
+        return commentReportRepository.getCommentReportDetail(commentReportId)
+                .orElseThrow(CommentReportNotFoundException::new);
     }
 }
 
