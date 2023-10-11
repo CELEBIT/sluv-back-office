@@ -43,4 +43,6 @@ public class UserReport extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(length = 45, columnDefinition = "varchar(45) default 'WAITING'")
     private ReportStatus reportStatus;
+
+    public void changeUserReportStatus(ReportStatus reportStatus) {this.reportStatus = reportStatus;}
 }
