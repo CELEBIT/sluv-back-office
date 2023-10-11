@@ -65,10 +65,7 @@ public class UserReportService {
     private void updateUserReportCompleted(UserReport userReport) {
         User reportedUser = userReport.getReported();
 
-        UserReportStack reportStack = UserReportStack.builder()
-                .reported(reportedUser)
-                .build();
-        userReportStackRepository.save(reportStack);
+        userReportStackRepository.save(UserReportStack.toEntity(reportedUser));
 
         LocalDateTime oneMonthAgo = LocalDateTime.now().minusMonths(1);
         long reportCount = userReportStackRepository.countByReportedAndCreatedAtAfter(reportedUser, oneMonthAgo);

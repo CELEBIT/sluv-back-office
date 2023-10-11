@@ -25,4 +25,9 @@ public class UserReportStack extends BaseEntity {
     @NotNull
     private User reported;
 
+    public static UserReportStack toEntity(User reportedUser) {
+        return UserReportStack.builder()
+                .reported(reportedUser)
+                .build();
+    }
 }
