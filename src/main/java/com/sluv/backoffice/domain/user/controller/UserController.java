@@ -1,5 +1,6 @@
 package com.sluv.backoffice.domain.user.controller;
 
+import com.sluv.backoffice.domain.user.dto.UpdateUserReportResDto;
 import com.sluv.backoffice.domain.user.dto.UserInfoDto;
 import com.sluv.backoffice.domain.user.dto.UserReportInfoDto;
 import com.sluv.backoffice.domain.user.enums.UserStatus;
@@ -75,6 +76,24 @@ public class UserController {
                                                                                                      @RequestParam(required = false) ReportStatus reportStatus) {
         return ResponseEntity.ok().body(SuccessDataResponse.<PaginationResDto<UserReportInfoDto>>builder()
                 .result(userReportService.getAllUserReport(pageable, reportStatus))
+                .build());
+    }
+
+    @Operation(
+            summary = "유저 신고 처리",
+            description = "유저 신고 id와 reportStatus(COMPLETED, REJECTED)를 통해 유저 신고 처리"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "1000", description = "요청성공"),
+            @ApiResponse(responseCode = "5000", description = "서버내부 에러", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "5001", description = "DB 에러", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    @PostMapping("/report/{userReportId}")
+    public ResponseEntity<SuccessDataResponse<UpdateUserReportResDto>> updateUserReportStatus(@PathVariable Long userReportId,
+                                                                                              @RequestParam ReportStatus reportStatus) {
+
+        return ResponseEntity.ok().body(SuccessDataResponse.<UpdateUserReportResDto>builder()
+                .result(userReportService.updateUserReportStatus(userReportId, reportStatus))
                 .build());
     }
 }
