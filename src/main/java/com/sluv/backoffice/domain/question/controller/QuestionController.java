@@ -2,6 +2,7 @@ package com.sluv.backoffice.domain.question.controller;
 
 import com.sluv.backoffice.domain.question.dto.QuestionReportDetailDto;
 import com.sluv.backoffice.domain.question.dto.QuestionReportInfoDto;
+import com.sluv.backoffice.domain.question.dto.UpdateQuestionReportResDto;
 import com.sluv.backoffice.domain.question.service.QuestionReportService;
 import com.sluv.backoffice.global.common.enums.ReportStatus;
 import com.sluv.backoffice.global.common.response.ErrorResponse;
@@ -54,6 +55,24 @@ public class QuestionController {
     public ResponseEntity<SuccessDataResponse<QuestionReportDetailDto>> getQuestionReportDetail(@PathVariable Long questionReportId) {
         return ResponseEntity.ok().body(SuccessDataResponse.<QuestionReportDetailDto>builder()
                 .result(questionReportService.getQuestionReportDetail(questionReportId))
+                .build());
+    }
+
+    @Operation(
+            summary = "질문 신고 처리",
+            description = "질문 신고 id와 reportStatus(COMPLETED, REJECTED)를 통해 질문 신고 처리"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "1000", description = "요청성공"),
+            @ApiResponse(responseCode = "5000", description = "서버내부 에러", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "5001", description = "DB 에러", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    @PostMapping("/report/{questionReportId}")
+    public ResponseEntity<SuccessDataResponse<UpdateQuestionReportResDto>> changeQuestionReportStatus(@PathVariable Long questionReportId,
+                                                                                                      @RequestParam ReportStatus reportStatus) {
+
+        return ResponseEntity.ok().body(SuccessDataResponse.<UpdateQuestionReportResDto>builder()
+                .result(questionReportService.updateQuestionReportStatus(questionReportId, reportStatus))
                 .build());
     }
 }
