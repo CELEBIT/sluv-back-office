@@ -47,4 +47,7 @@ public class ItemReport extends BaseEntity {
     @Column(length = 45, columnDefinition = "varchar(45) default 'WAITING'")
     private ReportStatus reportStatus;
 
+    public void changeItemReportStatus(ReportStatus reportStatus) {
+        this.reportStatus = reportStatus;
+    }
 }
