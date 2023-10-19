@@ -90,7 +90,7 @@ public class Item extends BaseEntity {
         // 레디스 적용전 임시
         this.viewNum--;
     }
-    public void changeStatus(ItemStatus itemStatus){
+    public void changeItemStatus(ItemStatus itemStatus){
         this.itemStatus = itemStatus;
     }
 }
