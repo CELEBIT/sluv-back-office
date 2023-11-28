@@ -3,11 +3,11 @@ package com.sluv.backoffice;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-// @SpringBootTest
+ @SpringBootTest
 class BackofficeApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
+	 @Test
+	 void contextLoads() {
+	 }
 
 }
