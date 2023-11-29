@@ -51,8 +51,7 @@ public class User extends BaseEntity {
 
     @Size(max = 45)
     private String ageRange;
-
-    @Size(max = 45)
+    
     @Enumerated(EnumType.STRING)
     private UserGender gender;
 
