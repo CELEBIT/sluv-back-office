@@ -1,9 +1,17 @@
 package com.sluv.backoffice.domain.user.entity;
 
 import com.sluv.backoffice.domain.user.enums.SnsType;
+import com.sluv.backoffice.domain.user.enums.UserGender;
 import com.sluv.backoffice.domain.user.enums.UserStatus;
 import com.sluv.backoffice.global.common.entity.BaseEntity;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -22,7 +30,8 @@ import org.hibernate.annotations.DynamicInsert;
 @Table(name = "user")
 public class User extends BaseEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long id;
 
@@ -44,19 +53,22 @@ public class User extends BaseEntity {
     private String ageRange;
 
     @Size(max = 45)
-    private String gender;
+    @Enumerated(EnumType.STRING)
+    private UserGender gender;
 
     @Enumerated(EnumType.STRING)
     @Column(length = 45, columnDefinition = "varchar(45) default 'PENDING_PROFILE'")
     private UserStatus userStatus;
 
-    public void changeProfileImgUrl(String profileImgUrl){
+    public void changeProfileImgUrl(String profileImgUrl) {
         this.profileImgUrl = profileImgUrl;
     }
-    public void changeNickname(String nickname){
+
+    public void changeNickname(String nickname) {
         this.nickname = nickname;
     }
-    public void changeUserStatus(UserStatus userStatus){
+
+    public void changeUserStatus(UserStatus userStatus) {
         this.userStatus = userStatus;
     }
 }
