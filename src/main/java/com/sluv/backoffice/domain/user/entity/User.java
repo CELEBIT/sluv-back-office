@@ -1,6 +1,7 @@
 package com.sluv.backoffice.domain.user.entity;
 
 import com.sluv.backoffice.domain.user.enums.SnsType;
+import com.sluv.backoffice.domain.user.enums.UserAge;
 import com.sluv.backoffice.domain.user.enums.UserGender;
 import com.sluv.backoffice.domain.user.enums.UserStatus;
 import com.sluv.backoffice.global.common.entity.BaseEntity;
@@ -49,8 +50,8 @@ public class User extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String profileImgUrl;
 
-    @Size(max = 45)
-    private String ageRange;
+    @Enumerated(EnumType.STRING)
+    private UserAge ageRange;
     
     @Enumerated(EnumType.STRING)
     private UserGender gender;
