@@ -19,6 +19,10 @@ public class UserDashBoardController {
 
     private final UserService userService;
 
+    @Operation(
+            summary = "대시보드 - 유저의 성별 분포 조회",
+            description = "대시보드에서 유저의 성별 분포를 출력한다"
+    )
     @GetMapping("/gender")
     public ResponseEntity<SuccessDataResponse<UserCountByCategoryResDto>> getUserCountByGender() {
         return ResponseEntity.ok().body(
@@ -30,7 +34,7 @@ public class UserDashBoardController {
 
 
     @Operation(
-            summary = "대시보드 - 유저의 연령대 분포",
+            summary = "대시보드 - 유저의 연령대 분포 조화",
             description = "대시보드에서 유저의 연령대 분포를 출력한다"
     )
     @GetMapping("/age")
