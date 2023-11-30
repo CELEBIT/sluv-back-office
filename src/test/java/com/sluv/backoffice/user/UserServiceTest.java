@@ -1,5 +1,6 @@
 package com.sluv.backoffice.user;
 
+import static com.sluv.backoffice.domain.user.enums.UserGender.WOMAN;
 import static com.sluv.backoffice.domain.user.enums.UserStatus.ACTIVE;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -48,21 +49,21 @@ public class UserServiceTest {
                 .email("test3@sluv.com")
                 .snsType(SnsType.KAKAO)
                 .userStatus(ACTIVE)
-                .gender(UserGender.WOMAN)
+                .gender(WOMAN)
                 .build();
 
         User woManUser2 = User.builder()
                 .email("test4@sluv.com")
                 .snsType(SnsType.KAKAO)
                 .userStatus(ACTIVE)
-                .gender(UserGender.WOMAN)
+                .gender(WOMAN)
                 .build();
 
         User woManUser3 = User.builder()
                 .email("test5@sluv.com")
                 .snsType(SnsType.KAKAO)
                 .userStatus(ACTIVE)
-                .gender(UserGender.WOMAN)
+                .gender(WOMAN)
                 .build();
 
         User unKnownUser1 = User.builder()
@@ -78,7 +79,7 @@ public class UserServiceTest {
         //when
         UserCountByCategoryResDto userCountByGender = userService.getUserCountByGender();
         List<UserCountByEachCategoryResDto> woManUsers = userCountByGender.getEachCategory().stream()
-                .filter(dto -> dto.getCategory() == UserGender.WOMAN)
+                .filter(dto -> dto.getCategory().equals(WOMAN.toString()))
                 .toList();
 
         //then
