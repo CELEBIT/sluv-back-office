@@ -1,10 +1,5 @@
 package com.sluv.backoffice.domain.user.dto;
 
-import static com.sluv.backoffice.domain.user.enums.UserGender.MAN;
-import static com.sluv.backoffice.domain.user.enums.UserGender.UNKNOWN;
-import static com.sluv.backoffice.domain.user.enums.UserGender.WOMAN;
-
-import com.sluv.backoffice.domain.user.enums.UserGender;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -34,15 +29,12 @@ public class UserCountByCategoryResDto {
     @Schema(description = "전체 유저의 수")
     private Long totalCount;
 
-    public static UserCountByCategoryResDto of(HashMap<UserGender, Long> countByGender, Long totalCount) {
-        List<UserCountByEachCategoryResDto> userCountByEachGenders = List.of(
-                new UserCountByEachCategoryResDto(MAN.toString(), countByGender.get(MAN),
-                        getPercent(countByGender.get(MAN), totalCount)),
-                new UserCountByEachCategoryResDto(WOMAN.toString(), countByGender.get(WOMAN),
-                        getPercent(countByGender.get(WOMAN), totalCount)),
-                new UserCountByEachCategoryResDto(UNKNOWN.toString(), countByGender.get(UNKNOWN),
-                        getPercent(countByGender.get(UNKNOWN), totalCount)));
-        return new UserCountByCategoryResDto(userCountByEachGenders, totalCount);
+    public static <T> UserCountByCategoryResDto of(HashMap<T, Long> countByCategory, Long totalCount) {
+        List<UserCountByEachCategoryResDto> userCountByEachCategories = countByCategory.entrySet().stream()
+                .map(entry -> new UserCountByEachCategoryResDto(entry.getKey().toString(), entry.getValue(),
+                        getPercent(entry.getValue(), totalCount)))
+                .toList();
+        return new UserCountByCategoryResDto(userCountByEachCategories, totalCount);
     }
 
     private static Double getPercent(Long genderCount, Long totalCount) {
