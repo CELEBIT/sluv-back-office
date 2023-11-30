@@ -17,32 +17,32 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserCountByGenderResDto {
+public class UserCountByCategoryResDto {
 
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class EachUserCountByGenderResDto {
-        private UserGender gender;
-        @Schema(description = "성별에 해당하는 유저의 수")
+    public static class UserCountByEachCategoryResDto {
+        private String category;
+        @Schema(description = "카테고리에 해당하는 유저의 수")
         private Long count;
         private Double percent;
     }
 
-    @Schema(description = "각 성별의 통계")
-    private List<EachUserCountByGenderResDto> eachGender;
+    @Schema(description = "각 카테고리의 통계")
+    private List<UserCountByEachCategoryResDto> eachCategory;
     @Schema(description = "전체 유저의 수")
     private Long totalCount;
 
-    public static UserCountByGenderResDto of(HashMap<UserGender, Long> countByGender, Long totalCount) {
-        List<EachUserCountByGenderResDto> userCountByEachGenders = List.of(
-                new EachUserCountByGenderResDto(MAN, countByGender.get(MAN),
+    public static UserCountByCategoryResDto of(HashMap<UserGender, Long> countByGender, Long totalCount) {
+        List<UserCountByEachCategoryResDto> userCountByEachGenders = List.of(
+                new UserCountByEachCategoryResDto(MAN.toString(), countByGender.get(MAN),
                         getPercent(countByGender.get(MAN), totalCount)),
-                new EachUserCountByGenderResDto(WOMAN, countByGender.get(WOMAN),
+                new UserCountByEachCategoryResDto(WOMAN.toString(), countByGender.get(WOMAN),
                         getPercent(countByGender.get(WOMAN), totalCount)),
-                new EachUserCountByGenderResDto(UNKNOWN, countByGender.get(UNKNOWN),
+                new UserCountByEachCategoryResDto(UNKNOWN.toString(), countByGender.get(UNKNOWN),
                         getPercent(countByGender.get(UNKNOWN), totalCount)));
-        return new UserCountByGenderResDto(userCountByEachGenders, totalCount);
+        return new UserCountByCategoryResDto(userCountByEachGenders, totalCount);
     }
 
     private static Double getPercent(Long genderCount, Long totalCount) {

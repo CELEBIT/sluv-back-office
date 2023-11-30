@@ -3,8 +3,8 @@ package com.sluv.backoffice.user;
 import static com.sluv.backoffice.domain.user.enums.UserStatus.ACTIVE;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.sluv.backoffice.domain.user.dto.UserCountByGenderResDto;
-import com.sluv.backoffice.domain.user.dto.UserCountByGenderResDto.EachUserCountByGenderResDto;
+import com.sluv.backoffice.domain.user.dto.UserCountByCategoryResDto;
+import com.sluv.backoffice.domain.user.dto.UserCountByCategoryResDto.UserCountByEachCategoryResDto;
 import com.sluv.backoffice.domain.user.entity.User;
 import com.sluv.backoffice.domain.user.enums.SnsType;
 import com.sluv.backoffice.domain.user.enums.UserGender;
@@ -76,9 +76,9 @@ public class UserServiceTest {
         userRepository.saveAll(users);
 
         //when
-        UserCountByGenderResDto userCountByGender = userService.getUserCountByGender();
-        List<EachUserCountByGenderResDto> woManUsers = userCountByGender.getEachGender().stream()
-                .filter(dto -> dto.getGender() == UserGender.WOMAN)
+        UserCountByCategoryResDto userCountByGender = userService.getUserCountByGender();
+        List<UserCountByEachCategoryResDto> woManUsers = userCountByGender.getEachCategory().stream()
+                .filter(dto -> dto.getCategory() == UserGender.WOMAN)
                 .toList();
 
         //then

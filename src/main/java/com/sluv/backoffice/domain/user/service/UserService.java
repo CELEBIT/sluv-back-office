@@ -1,6 +1,6 @@
 package com.sluv.backoffice.domain.user.service;
 
-import com.sluv.backoffice.domain.user.dto.UserCountByGenderResDto;
+import com.sluv.backoffice.domain.user.dto.UserCountByCategoryResDto;
 import com.sluv.backoffice.domain.user.dto.UserInfoDto;
 import com.sluv.backoffice.domain.user.entity.User;
 import com.sluv.backoffice.domain.user.enums.UserGender;
@@ -42,11 +42,11 @@ public class UserService {
         user.changeUserStatus(userStatus);
     }
 
-    public UserCountByGenderResDto getUserCountByGender() {
+    public UserCountByCategoryResDto getUserCountByGender() {
         List<User> allUser = userRepository.findAll();
         HashMap<UserGender, Long> countByGender = allUser.stream()
                 .collect(Collectors.groupingBy(User::getGender, HashMap::new, Collectors.counting()));
 
-        return UserCountByGenderResDto.of(countByGender, allUser.stream().count());
+        return UserCountByCategoryResDto.of(countByGender, allUser.stream().count());
     }
 }
