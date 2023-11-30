@@ -51,7 +51,7 @@ public class User extends BaseEntity {
     private String profileImgUrl;
 
     @Enumerated(EnumType.STRING)
-    private UserAge age;
+    private UserAge ageRange;
     
     @Enumerated(EnumType.STRING)
     private UserGender gender;
