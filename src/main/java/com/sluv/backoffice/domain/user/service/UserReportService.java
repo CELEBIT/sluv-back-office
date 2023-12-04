@@ -12,6 +12,7 @@ import com.sluv.backoffice.domain.user.repository.UserReportRepository;
 import com.sluv.backoffice.domain.user.repository.UserReportStackRepository;
 import com.sluv.backoffice.global.common.enums.ReportStatus;
 import com.sluv.backoffice.global.common.response.PaginationResDto;
+import com.sluv.backoffice.global.common.service.FCMNotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +28,7 @@ public class UserReportService {
 
     private final UserReportRepository userReportRepository;
     private final UserReportStackRepository userReportStackRepository;
+    private final FCMNotificationService fcmNotificationService;
 
     @Transactional(readOnly = true)
     public PaginationResDto<UserReportInfoDto> getAllUserReport(Pageable pageable, ReportStatus reportStatus) {
@@ -52,26 +54,31 @@ public class UserReportService {
         }
 
         userReport.changeUserReportStatus(reportStatus);
+        updateUserReportAndNotify(userReport);
 
-        if (reportStatus == ReportStatus.COMPLETED) {
-            updateUserReportCompleted(userReport);
-        }
         return UpdateUserReportResDto.of(userReport.getReportStatus());
     }
 
-    /**
-     *  TODO: 추후 신고자 및 피신고자 알림 설정 추가
-     */
-    private void updateUserReportCompleted(UserReport userReport) {
+    private void updateUserReportAndNotify(UserReport userReport) {
         User reportedUser = userReport.getReported();
+        User reporterUser = userReport.getReporter();
 
-        userReportStackRepository.save(UserReportStack.toEntity(reportedUser));
+        if (userReport.getReportStatus() == ReportStatus.COMPLETED) {
+            userReportStackRepository.save(UserReportStack.toEntity(reportedUser));
 
-        LocalDateTime oneMonthAgo = LocalDateTime.now().minusMonths(1);
-        long reportCount = userReportStackRepository.countByReportedAndCreatedAtAfter(reportedUser, oneMonthAgo);
+            fcmNotificationService.sendFCMNotification(reportedUser.getId(), "당신은 신고 당했습니다.", userReport.getContent());
+            fcmNotificationService.sendFCMNotification(reporterUser.getId(), "신고가 접수 되었습니다.", userReport.getContent());
 
-        if (reportCount >= 3) {
-            reportedUser.changeUserStatus(UserStatus.BLOCKED);
+            LocalDateTime oneMonthAgo = LocalDateTime.now().minusMonths(1);
+            long reportCount = userReportStackRepository.countByReportedAndCreatedAtAfter(reportedUser, oneMonthAgo);
+
+            if (reportCount >= 3) {
+                reportedUser.changeUserStatus(UserStatus.BLOCKED);
+                fcmNotificationService.sendFCMNotification(reportedUser.getId(), "신고 누적으로 인한 계정정지 안내", "3회 이상 신고 누적으로 계정이 일시정지 됩니다.");
+            }
+        }
+        else {
+            fcmNotificationService.sendFCMNotification(reporterUser.getId(), "신고가 기각되었습니다.", userReport.getContent());
         }
     }
 }
