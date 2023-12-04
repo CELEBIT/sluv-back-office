@@ -50,6 +50,8 @@ public class User extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String profileImgUrl;
 
+    private String fcmToken;
+
     @Enumerated(EnumType.STRING)
     private UserAge ageRange;
     
