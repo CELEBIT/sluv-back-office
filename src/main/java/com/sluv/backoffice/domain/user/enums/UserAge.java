@@ -1,15 +1,25 @@
 package com.sluv.backoffice.domain.user.enums;
 
 public enum UserAge {
-    UNKNOWN,
-    ZEROS,
-    TEENAGERS,
-    TWENTIES,
-    THIRTIES,
-    FORTIES,
-    FIFTIES,
-    SIXTIES,
-    SEVENTIES,
-    EIGHTIES,
-    NINETIES;
+    UNKNOWN(-1),
+    ZEROS(0),
+    TEENAGERS(10),
+    TWENTIES(20),
+    THIRTIES(30),
+    FORTIES(40),
+    FIFTIES(50),
+    SIXTIES(60),
+    SEVENTIES(70),
+    EIGHTIES(80),
+    NINETIES(90);
+
+    private final int startAge;
+
+    UserAge(int startAge) {
+        this.startAge = startAge;
+    }
+
+    public int getStartAge() {
+        return startAge;
+    }
 }
