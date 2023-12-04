@@ -16,12 +16,24 @@ import org.springframework.stereotype.Service;
 public class ItemService {
     private final ItemRepository itemRepository;
 
-    public UserCountByCategoryResDto getItemCountByCelebCategory() {
+    public UserCountByCategoryResDto getItemCountByCelebCategoryParent() {
         List<Item> allItem = itemRepository.getAllItemWithCelebCategory();
 
         HashMap<String, Long> collect = allItem.stream().map(Item::getCeleb)
                 .map(Celeb::getCelebCategory)
                 .map(celebCategory -> celebCategory.getParent() == null ? celebCategory : celebCategory.getParent())
+                .collect(Collectors.groupingBy(CelebCategory::getName, HashMap::new, Collectors.counting()));
+
+        return UserCountByCategoryResDto.of(collect, allItem.stream().count());
+    }
+
+    public UserCountByCategoryResDto getItemCountByCelebCategoryChild(String parentCategory) {
+        List<Item> allItem = itemRepository.getAllItemWithCelebCategory();
+
+        HashMap<String, Long> collect = allItem.stream().map(Item::getCeleb)
+                .map(Celeb::getCelebCategory)
+                .filter(celebCategory -> celebCategory.getParent() != null)
+                .filter(celebCategory -> celebCategory.getParent().getName().equals(parentCategory))
                 .collect(Collectors.groupingBy(CelebCategory::getName, HashMap::new, Collectors.counting()));
 
         return UserCountByCategoryResDto.of(collect, allItem.stream().count());
