@@ -1,6 +1,7 @@
 package com.sluv.backoffice.user;
 
-import static com.sluv.backoffice.domain.user.enums.UserGender.WOMAN;
+import static com.sluv.backoffice.domain.user.enums.UserGender.FEMALE;
+import static com.sluv.backoffice.domain.user.enums.UserGender.MALE;
 import static com.sluv.backoffice.domain.user.enums.UserStatus.ACTIVE;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -36,35 +37,35 @@ public class UserServiceTest {
                 .email("test1@sluv.com")
                 .snsType(SnsType.KAKAO)
                 .userStatus(ACTIVE)
-                .gender(UserGender.MAN)
+                .gender(MALE)
                 .build();
 
         User manUser2 = User.builder()
                 .email("test2@sluv.com")
                 .snsType(SnsType.KAKAO)
                 .userStatus(ACTIVE)
-                .gender(UserGender.MAN)
+                .gender(MALE)
                 .build();
 
         User woManUser1 = User.builder()
                 .email("test3@sluv.com")
                 .snsType(SnsType.KAKAO)
                 .userStatus(ACTIVE)
-                .gender(WOMAN)
+                .gender(FEMALE)
                 .build();
 
         User woManUser2 = User.builder()
                 .email("test4@sluv.com")
                 .snsType(SnsType.KAKAO)
                 .userStatus(ACTIVE)
-                .gender(WOMAN)
+                .gender(FEMALE)
                 .build();
 
         User woManUser3 = User.builder()
                 .email("test5@sluv.com")
                 .snsType(SnsType.KAKAO)
                 .userStatus(ACTIVE)
-                .gender(WOMAN)
+                .gender(FEMALE)
                 .build();
 
         User unKnownUser1 = User.builder()
@@ -80,7 +81,7 @@ public class UserServiceTest {
         //when
         UserCountByCategoryResDto userCountByGender = userService.getUserCountByGender();
         List<UserCountByEachCategoryResDto> woManUsers = userCountByGender.getEachCategory().stream()
-                .filter(dto -> dto.getCategory().equals(WOMAN.toString()))
+                .filter(dto -> dto.getCategory().equals(FEMALE.toString()))
                 .toList();
 
         //then
