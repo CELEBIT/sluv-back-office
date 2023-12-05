@@ -4,22 +4,17 @@ import com.sluv.backoffice.domain.user.dto.UpdateUserReportResDto;
 import com.sluv.backoffice.domain.user.dto.UserReportInfoDto;
 import com.sluv.backoffice.domain.user.entity.User;
 import com.sluv.backoffice.domain.user.entity.UserReport;
-import com.sluv.backoffice.domain.user.entity.UserReportStack;
-import com.sluv.backoffice.domain.user.enums.UserStatus;
 import com.sluv.backoffice.domain.user.exception.InvalidReportStatusException;
 import com.sluv.backoffice.domain.user.exception.UserReportNotFoundException;
 import com.sluv.backoffice.domain.user.repository.UserReportRepository;
-import com.sluv.backoffice.domain.user.repository.UserReportStackRepository;
 import com.sluv.backoffice.global.common.enums.ReportStatus;
 import com.sluv.backoffice.global.common.response.PaginationResDto;
-import com.sluv.backoffice.global.common.service.FCMNotificationService;
+import com.sluv.backoffice.global.common.service.ReportProcessingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -27,8 +22,7 @@ import java.time.LocalDateTime;
 public class UserReportService {
 
     private final UserReportRepository userReportRepository;
-    private final UserReportStackRepository userReportStackRepository;
-    private final FCMNotificationService fcmNotificationService;
+    private final ReportProcessingService reportProcessingService;
 
     @Transactional(readOnly = true)
     public PaginationResDto<UserReportInfoDto> getAllUserReport(Pageable pageable, ReportStatus reportStatus) {
@@ -53,32 +47,12 @@ public class UserReportService {
             throw new InvalidReportStatusException();
         }
 
-        userReport.changeUserReportStatus(reportStatus);
-        updateUserReportAndNotify(userReport);
-
-        return UpdateUserReportResDto.of(userReport.getReportStatus());
-    }
-
-    private void updateUserReportAndNotify(UserReport userReport) {
         User reportedUser = userReport.getReported();
         User reporterUser = userReport.getReporter();
 
-        if (userReport.getReportStatus() == ReportStatus.COMPLETED) {
-            userReportStackRepository.save(UserReportStack.toEntity(reportedUser));
+        userReport.changeUserReportStatus(reportStatus);
+        reportProcessingService.processReport(reportedUser, reporterUser, userReport.getContent(), reportStatus);
 
-            fcmNotificationService.sendFCMNotification(reportedUser.getId(), "당신은 신고 당했습니다.", userReport.getContent());
-            fcmNotificationService.sendFCMNotification(reporterUser.getId(), "신고가 접수 되었습니다.", userReport.getContent());
-
-            LocalDateTime oneMonthAgo = LocalDateTime.now().minusMonths(1);
-            long reportCount = userReportStackRepository.countByReportedAndCreatedAtAfter(reportedUser, oneMonthAgo);
-
-            if (reportCount >= 3) {
-                reportedUser.changeUserStatus(UserStatus.BLOCKED);
-                fcmNotificationService.sendFCMNotification(reportedUser.getId(), "신고 누적으로 인한 계정정지 안내", "3회 이상 신고 누적으로 계정이 일시정지 됩니다.");
-            }
-        }
-        else {
-            fcmNotificationService.sendFCMNotification(reporterUser.getId(), "신고가 기각되었습니다.", userReport.getContent());
-        }
+        return UpdateUserReportResDto.of(userReport.getReportStatus());
     }
 }

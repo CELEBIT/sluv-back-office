@@ -8,19 +8,16 @@ import com.sluv.backoffice.domain.question.enums.QuestionStatus;
 import com.sluv.backoffice.domain.question.exception.QuestionReportNotFoundException;
 import com.sluv.backoffice.domain.question.repository.QuestionReportRepository;
 import com.sluv.backoffice.domain.user.entity.User;
-import com.sluv.backoffice.domain.user.entity.UserReportStack;
-import com.sluv.backoffice.domain.user.enums.UserStatus;
 import com.sluv.backoffice.domain.user.exception.InvalidReportStatusException;
 import com.sluv.backoffice.domain.user.repository.UserReportStackRepository;
 import com.sluv.backoffice.global.common.enums.ReportStatus;
 import com.sluv.backoffice.global.common.response.PaginationResDto;
+import com.sluv.backoffice.global.common.service.ReportProcessingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +25,7 @@ import java.time.LocalDateTime;
 public class QuestionReportService {
 
     private final QuestionReportRepository questionReportRepository;
-    private final UserReportStackRepository userReportStackRepository;
+    private final ReportProcessingService reportProcessingService;
 
     @Transactional(readOnly = true)
     public PaginationResDto<QuestionReportInfoDto> getAllQuestionReport(Pageable pageable, ReportStatus reportStatus) {
@@ -59,28 +56,16 @@ public class QuestionReportService {
             throw new InvalidReportStatusException();
         }
 
+        User reportedUser = questionReport.getQuestion().getUser();
+        User reporterUser = questionReport.getReporter();
+
         questionReport.changeQuestionReportStatus(reportStatus);
 
         if (reportStatus == ReportStatus.COMPLETED) {
-            updateQuestionReportCompleted(questionReport);
+            questionReport.getQuestion().changeQuestionStatus(QuestionStatus.BLOCKED);
         }
+        reportProcessingService.processReport(reportedUser, reporterUser, questionReport.getContent(), reportStatus);
+
         return UpdateQuestionReportResDto.of(questionReport.getReportStatus());
-    }
-
-    /**
-     *TODO:추후 신고자 및 피신고자 알림 설정 추가
-     */
-    private void updateQuestionReportCompleted(QuestionReport questionReport) {
-        questionReport.getQuestion().changeQuestionStatus(QuestionStatus.BLOCKED);
-
-        User reportedUser = questionReport.getQuestion().getUser();
-        userReportStackRepository.save(UserReportStack.toEntity(reportedUser));
-
-        LocalDateTime oneMonthAgo = LocalDateTime.now().minusMonths(1);
-        long reportCount = userReportStackRepository.countByReportedAndCreatedAtAfter(reportedUser, oneMonthAgo);
-
-        if (reportCount >= 3) {
-            reportedUser.changeUserStatus(UserStatus.BLOCKED);
-        }
     }
 }
