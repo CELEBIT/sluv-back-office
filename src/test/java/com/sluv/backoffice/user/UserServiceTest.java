@@ -5,6 +5,7 @@ import static com.sluv.backoffice.domain.user.enums.UserGender.MALE;
 import static com.sluv.backoffice.domain.user.enums.UserStatus.ACTIVE;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.sluv.backoffice.domain.user.dto.UserAccountCountResDto;
 import com.sluv.backoffice.domain.user.dto.UserCountByCategoryResDto;
 import com.sluv.backoffice.domain.user.dto.UserCountByCategoryResDto.UserCountByEachCategoryResDto;
 import com.sluv.backoffice.domain.user.entity.User;
@@ -150,6 +151,35 @@ public class UserServiceTest {
         assertThat(userCountByAge.getTotalCount()).isEqualTo(6);
         assertThat(teenagerUsers.get(0).getCount()).isEqualTo(3);
         assertThat(teenagerUsers.get(0).getPercent()).isEqualTo(50);
+
+    }
+
+    @DisplayName("가입자 수 통계를 조회한다.")
+    @Test
+    public void getUserAccountCount() {
+        //given
+        User user1 = User.builder()
+                .email("test1@sluv.com")
+                .snsType(SnsType.KAKAO)
+                .userStatus(ACTIVE)
+                .build();
+
+        User user2 = User.builder()
+                .email("test2@sluv.com")
+                .snsType(SnsType.KAKAO)
+                .userStatus(ACTIVE)
+                .build();
+
+        List<User> users = List.of(user1, user2);
+        userRepository.saveAll(users);
+
+        //when
+        UserAccountCountResDto userAccountCount = userService.getUserAccountCount();
+
+        //then
+        assertThat(userAccountCount.getTotalCount()).isEqualTo(2);
+        assertThat(userAccountCount.getPercent()).isEqualTo(100);
+        assertThat(userAccountCount.getCountGraph().get(userAccountCount.getCountGraph().size() - 1)).isEqualTo(2);
 
     }
 }
