@@ -7,19 +7,15 @@ import com.sluv.backoffice.domain.item.enums.ItemStatus;
 import com.sluv.backoffice.domain.item.exception.ItemReportNotFoundException;
 import com.sluv.backoffice.domain.item.repository.ItemReportRepository;
 import com.sluv.backoffice.domain.user.entity.User;
-import com.sluv.backoffice.domain.user.entity.UserReportStack;
-import com.sluv.backoffice.domain.user.enums.UserStatus;
 import com.sluv.backoffice.domain.user.exception.InvalidReportStatusException;
-import com.sluv.backoffice.domain.user.repository.UserReportStackRepository;
 import com.sluv.backoffice.global.common.enums.ReportStatus;
 import com.sluv.backoffice.global.common.response.PaginationResDto;
+import com.sluv.backoffice.global.common.service.ReportProcessingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +23,7 @@ import java.time.LocalDateTime;
 public class ItemReportService {
 
     private final ItemReportRepository itemReportRepository;
-    private final UserReportStackRepository userReportStackRepository;
+    private final ReportProcessingService reportProcessingService;
 
     @Transactional(readOnly = true)
     public PaginationResDto<ItemReportInfoDto> getAllItemReport(Pageable pageable, ReportStatus reportStatus) {
@@ -52,28 +48,16 @@ public class ItemReportService {
             throw new InvalidReportStatusException();
         }
 
+        User reportedUser = itemReport.getItem().getUser();
+        User reporterUser = itemReport.getReporter();
+
         itemReport.changeItemReportStatus(reportStatus);
 
         if (reportStatus == ReportStatus.COMPLETED) {
-            updateItemReportCompleted(itemReport);
+            itemReport.getItem().changeItemStatus(ItemStatus.BLOCKED);
         }
+        reportProcessingService.processReport(reportedUser, reporterUser, itemReport.getContent(), reportStatus);
+
         return UpdateItemReportResDto.of(itemReport.getReportStatus());
-    }
-
-    /**
-     *TODO:추후 신고자 및 피신고자 알림 설정 추가
-     */
-    private void updateItemReportCompleted(ItemReport itemReport) {
-        itemReport.getItem().changeItemStatus(ItemStatus.BLOCKED);
-
-        User reportedUser = itemReport.getItem().getUser();
-        userReportStackRepository.save(UserReportStack.toEntity(reportedUser));
-
-        LocalDateTime oneMonthAgo = LocalDateTime.now().minusMonths(1);
-        long reportCount = userReportStackRepository.countByReportedAndCreatedAtAfter(reportedUser, oneMonthAgo);
-
-        if (reportCount >= 3) {
-            reportedUser.changeUserStatus(UserStatus.BLOCKED);
-        }
     }
 }
