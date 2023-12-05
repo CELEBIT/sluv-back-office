@@ -1,9 +1,8 @@
 package com.sluv.backoffice.domain.brand.repository;
 
-import com.sluv.backoffice.domain.brand.entity.Brand;
-
+import com.sluv.backoffice.domain.brand.dto.HotBrandResDto;
 import java.util.List;
 
 public interface BrandRepositoryCustom {
-    List<Brand> test();
+    List<HotBrandResDto> getTop3HotBrand();
 }
