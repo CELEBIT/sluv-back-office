@@ -11,6 +11,8 @@ import com.sluv.backoffice.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class FCMNotificationService {
@@ -22,9 +24,8 @@ public class FCMNotificationService {
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
 
-        if (user.getFcmToken() == null) {
-            throw new UserFCMTokenNotFoundException();
-        }
+        String fcmToken = Optional.ofNullable(user.getFcmToken())
+                .orElseThrow(UserFCMTokenNotFoundException::new);
 
         Notification notification = Notification.builder()
                 .setTitle(title)
@@ -32,7 +33,7 @@ public class FCMNotificationService {
                 .build();
 
         Message message = Message.builder()
-                .setToken(user.getFcmToken())
+                .setToken(fcmToken)
                 .setNotification(notification)
                 .build();
 
