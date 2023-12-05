@@ -19,6 +19,8 @@ bin/
 
 *.yml
 
+src/main/resources/firebase/celebit-sluv-firebase-adminsdk-4ycho-1b06070369.json
+
 ### IntelliJ IDEA ###
 .idea
 *.iws
