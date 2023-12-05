@@ -1,5 +1,6 @@
 package com.sluv.backoffice.domain.user.controller;
 
+import com.sluv.backoffice.domain.user.dto.UserAccountCountResDto;
 import com.sluv.backoffice.domain.user.dto.UserCountByCategoryResDto;
 import com.sluv.backoffice.domain.user.service.UserService;
 import com.sluv.backoffice.global.common.response.SuccessDataResponse;
@@ -42,6 +43,23 @@ public class UserDashBoardController {
         return ResponseEntity.ok().body(
                 SuccessDataResponse.<UserCountByCategoryResDto>builder()
                         .result(userService.getUserCountByAge())
+                        .build()
+        );
+    }
+
+    @Operation(
+            summary = "대시보드 - 가입자 수 조회 기능",
+            description = "대시보드에서 가입자 수 조회 기능\n"
+                    + "1. 전체 가입자 수\n"
+                    + "2. 지난 1달간 증가 수\n"
+                    + "3. 지난 10주간 그래프"
+
+    )
+    @GetMapping("/accountCount")
+    public ResponseEntity<SuccessDataResponse<UserAccountCountResDto>> getUserCount() {
+        return ResponseEntity.ok().body(
+                SuccessDataResponse.<UserAccountCountResDto>builder()
+                        .result(userService.getUserAccountCount())
                         .build()
         );
     }

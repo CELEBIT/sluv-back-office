@@ -1,5 +1,6 @@
 package com.sluv.backoffice.domain.user.service;
 
+import com.sluv.backoffice.domain.user.dto.UserAccountCountResDto;
 import com.sluv.backoffice.domain.user.dto.UserCountByCategoryResDto;
 import com.sluv.backoffice.domain.user.dto.UserInfoDto;
 import com.sluv.backoffice.domain.user.entity.User;
@@ -9,6 +10,8 @@ import com.sluv.backoffice.domain.user.enums.UserStatus;
 import com.sluv.backoffice.domain.user.exception.UserNotFoundException;
 import com.sluv.backoffice.domain.user.repository.UserRepository;
 import com.sluv.backoffice.global.common.response.PaginationResDto;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -57,5 +60,32 @@ public class UserService {
                 .collect(Collectors.groupingBy(User::getAgeRange, HashMap::new, Collectors.counting()));
 
         return UserCountByCategoryResDto.of(countByGender, allUser.stream().count());
+    }
+
+    public UserAccountCountResDto getUserAccountCount() {
+        LocalDateTime now = LocalDateTime.now();
+        List<User> allUser = userRepository.findAll();
+        long recentMonthCount = getRecentMonthCount(now, allUser);
+        List<Long> countGraph = getCountGraph(now, allUser);
+        return UserAccountCountResDto.of(allUser.stream().count(), recentMonthCount, countGraph);
+    }
+
+    private static List<Long> getCountGraph(LocalDateTime now, List<User> allUser) {
+        List<Long> countGraph = new ArrayList<>();
+        for (int i = 10; i > 0; i--) {
+            LocalDateTime startWeek = now.minusWeeks(i);
+            LocalDateTime endWeek = now.minusWeeks(i - 1);
+            long count = allUser.stream()
+                    .filter(user -> user.getCreatedAt().isAfter(startWeek) && user.getCreatedAt().isBefore(endWeek))
+                    .count();
+            countGraph.add(count);
+        }
+        return countGraph;
+    }
+
+    private static long getRecentMonthCount(LocalDateTime now, List<User> allUser) {
+        return allUser.stream()
+                .filter(user -> user.getCreatedAt().isAfter(now.minusMonths(1)))
+                .count();
     }
 }
