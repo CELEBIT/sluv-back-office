@@ -1,10 +1,12 @@
 package com.sluv.backoffice.domain.user.controller;
 
+import com.sluv.backoffice.domain.user.dto.HotUserResDto;
 import com.sluv.backoffice.domain.user.dto.UserAccountCountResDto;
 import com.sluv.backoffice.domain.user.dto.UserCountByCategoryResDto;
 import com.sluv.backoffice.domain.user.service.UserService;
 import com.sluv.backoffice.global.common.response.SuccessDataResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -56,10 +58,25 @@ public class UserDashBoardController {
 
     )
     @GetMapping("/accountCount")
-    public ResponseEntity<SuccessDataResponse<UserAccountCountResDto>> getUserCount() {
+    public ResponseEntity<SuccessDataResponse<UserAccountCountResDto>> getUserAccountCount() {
         return ResponseEntity.ok().body(
                 SuccessDataResponse.<UserAccountCountResDto>builder()
                         .result(userService.getUserAccountCount())
+                        .build()
+        );
+    }
+
+    @Operation(
+            summary = "대시보드 - 인기 유저 Top3 조회 기능",
+            description = "대시보드에서 인기 유저 Top3 조회 기능\n"
+                    + "팔로워 수를 기준으로 내림차순"
+
+    )
+    @GetMapping("/hotUser")
+    public ResponseEntity<SuccessDataResponse<List<HotUserResDto>>> getTop3HotUser() {
+        return ResponseEntity.ok().body(
+                SuccessDataResponse.<List<HotUserResDto>>builder()
+                        .result(userService.getTop3HotUser())
                         .build()
         );
     }

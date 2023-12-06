@@ -1,5 +1,6 @@
 package com.sluv.backoffice.domain.user.service;
 
+import com.sluv.backoffice.domain.user.dto.HotUserResDto;
 import com.sluv.backoffice.domain.user.dto.UserAccountCountResDto;
 import com.sluv.backoffice.domain.user.dto.UserCountByCategoryResDto;
 import com.sluv.backoffice.domain.user.dto.UserInfoDto;
@@ -87,5 +88,10 @@ public class UserService {
         return allUser.stream()
                 .filter(user -> user.getCreatedAt().isAfter(now.minusMonths(1)))
                 .count();
+    }
+
+    public List<HotUserResDto> getTop3HotUser() {
+        return userRepository.getTop3HotUser();
+
     }
 }
