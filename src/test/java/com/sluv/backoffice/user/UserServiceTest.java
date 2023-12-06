@@ -5,15 +5,19 @@ import static com.sluv.backoffice.domain.user.enums.UserGender.MALE;
 import static com.sluv.backoffice.domain.user.enums.UserStatus.ACTIVE;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.sluv.backoffice.domain.user.dto.HotUserResDto;
 import com.sluv.backoffice.domain.user.dto.UserAccountCountResDto;
 import com.sluv.backoffice.domain.user.dto.UserCountByCategoryResDto;
 import com.sluv.backoffice.domain.user.dto.UserCountByCategoryResDto.UserCountByEachCategoryResDto;
+import com.sluv.backoffice.domain.user.entity.Follow;
 import com.sluv.backoffice.domain.user.entity.User;
 import com.sluv.backoffice.domain.user.enums.SnsType;
 import com.sluv.backoffice.domain.user.enums.UserAge;
 import com.sluv.backoffice.domain.user.enums.UserGender;
+import com.sluv.backoffice.domain.user.repository.FollowRepository;
 import com.sluv.backoffice.domain.user.repository.UserRepository;
 import com.sluv.backoffice.domain.user.service.UserService;
+import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,6 +32,8 @@ public class UserServiceTest {
     private UserService userService;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private FollowRepository followRepository;
 
 
     @DisplayName("사용자의 성별 분포 통계를 조회한다")
@@ -180,6 +186,80 @@ public class UserServiceTest {
         assertThat(userAccountCount.getTotalCount()).isEqualTo(2);
         assertThat(userAccountCount.getPercent()).isEqualTo(100);
         assertThat(userAccountCount.getCountGraph().get(userAccountCount.getCountGraph().size() - 1)).isEqualTo(2);
+
+    }
+
+    @DisplayName("Top3 인기 유저 조회")
+    @Test
+    public void getTop3HotUser() {
+        //given
+        User user1 = User.builder()
+                .email("test1@sluv.com")
+                .nickname("user1")
+                .snsType(SnsType.KAKAO)
+                .userStatus(ACTIVE)
+                .build();
+
+        User user2 = User.builder()
+                .email("test2@sluv.com")
+                .nickname("user2")
+                .snsType(SnsType.KAKAO)
+                .userStatus(ACTIVE)
+                .build();
+
+        User user3 = User.builder()
+                .email("test3@sluv.com")
+                .nickname("user3")
+                .snsType(SnsType.KAKAO)
+                .userStatus(ACTIVE)
+                .build();
+
+        User user4 = User.builder()
+                .email("test4@sluv.com")
+                .nickname("user4")
+                .snsType(SnsType.KAKAO)
+                .userStatus(ACTIVE)
+                .build();
+
+        Follow follow1 = Follow.builder()
+                .followee(user1)
+                .follower(user2)
+                .build();
+
+        Follow follow2 = Follow.builder()
+                .followee(user1)
+                .follower(user3)
+                .build();
+
+        Follow follow3 = Follow.builder()
+                .followee(user1)
+                .follower(user4)
+                .build();
+
+        Follow follow4 = Follow.builder()
+                .followee(user2)
+                .follower(user3)
+                .build();
+
+        Follow follow5 = Follow.builder()
+                .followee(user2)
+                .follower(user4)
+                .build();
+
+        Follow follow6 = Follow.builder()
+                .followee(user3)
+                .follower(user4)
+                .build();
+
+        userRepository.saveAll(Arrays.asList(user1, user2, user3, user4));
+        followRepository.saveAll(Arrays.asList(follow1, follow2, follow3, follow4, follow5, follow6));
+
+        //when
+        List<HotUserResDto> top3HotUser = userRepository.getTop3HotUser();
+
+        //then
+        assertThat(top3HotUser.get(0).getNickName()).isEqualTo(user1.getNickname());
+        assertThat(top3HotUser.get(0).getFollowerCount()).isEqualTo(3);
 
     }
 }
