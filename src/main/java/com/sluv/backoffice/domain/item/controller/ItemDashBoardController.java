@@ -1,9 +1,11 @@
 package com.sluv.backoffice.domain.item.controller;
 
+import com.sluv.backoffice.domain.item.dto.HotItemResDto;
 import com.sluv.backoffice.domain.item.service.ItemService;
 import com.sluv.backoffice.domain.user.dto.UserCountByCategoryResDto;
 import com.sluv.backoffice.global.common.response.SuccessDataResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +42,22 @@ public class ItemDashBoardController {
         return ResponseEntity.ok().body(
                 SuccessDataResponse.<UserCountByCategoryResDto>builder()
                         .result(result)
+                        .build()
+        );
+    }
+
+    @Operation(
+            summary = "대시보드 - Top3 인기 아이템 조회",
+            description = "대시보드에서 Top3 인기 아이템을 조회하여 출력\n"
+                    + "인기의 기준은 (조회수 + 좋아요 수 + 스크랩 수)\n"
+                    + "조회수 > 좋아요 > 스크랩 순서로 중요."
+    )
+    @GetMapping("/hotItem")
+    public ResponseEntity<SuccessDataResponse<List<HotItemResDto>>> getTop3HotItem() {
+
+        return ResponseEntity.ok().body(
+                SuccessDataResponse.<List<HotItemResDto>>builder()
+                        .result(itemService.getTop3HotItem())
                         .build()
         );
     }
