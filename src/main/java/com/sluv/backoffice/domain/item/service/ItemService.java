@@ -2,6 +2,7 @@ package com.sluv.backoffice.domain.item.service;
 
 import com.sluv.backoffice.domain.celeb.entity.Celeb;
 import com.sluv.backoffice.domain.celeb.entity.CelebCategory;
+import com.sluv.backoffice.domain.item.dto.HotItemResDto;
 import com.sluv.backoffice.domain.item.entity.Item;
 import com.sluv.backoffice.domain.item.repository.ItemRepository;
 import com.sluv.backoffice.domain.user.dto.UserCountByCategoryResDto;
@@ -37,5 +38,9 @@ public class ItemService {
                 .collect(Collectors.groupingBy(CelebCategory::getName, HashMap::new, Collectors.counting()));
 
         return UserCountByCategoryResDto.of(collect, allItem.stream().count());
+    }
+
+    public List<HotItemResDto> getTop3HotItem() {
+        return itemRepository.getTop3HotItem();
     }
 }
