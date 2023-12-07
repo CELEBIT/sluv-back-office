@@ -17,14 +17,14 @@ public class VisitHistoryCountResDto {
     @Schema(description = "동일시간 대비 어제와 비교하여 접속자수 증감비율")
     private Double percent;
     @Schema(description = "오늘 누적 접속자 수")
-    private Long totalCount;
+    private Long todayCount;
     @Schema(description = "오늘을 기준으로 10일간 일일 누적 접속자 수 그래프")
     private List<Long> countGraph;
 
     public static VisitHistoryCountResDto of(Long todayCount, Long yesterdayCount, List<Long> countGraph) {
         return VisitHistoryCountResDto.builder()
                 .percent(getPercent(yesterdayCount, todayCount))
-                .totalCount(todayCount)
+                .todayCount(todayCount)
                 .countGraph(countGraph)
                 .build();
     }
