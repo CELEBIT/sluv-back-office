@@ -1,4 +1,4 @@
-package com.sluv.backoffice.domain.visitor.entity;
+package com.sluv.backoffice.domain.visit.entity;
 
 import com.sluv.backoffice.global.common.entity.BaseEntity;
 import jakarta.persistence.Column;

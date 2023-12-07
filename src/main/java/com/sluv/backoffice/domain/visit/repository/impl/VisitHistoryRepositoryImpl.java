@@ -1,9 +1,9 @@
-package com.sluv.backoffice.domain.visitor.repository.impl;
+package com.sluv.backoffice.domain.visit.repository.impl;
 
-import static com.sluv.backoffice.domain.visitor.entity.QVisitHistory.visitHistory;
+import static com.sluv.backoffice.domain.visit.entity.QVisitHistory.visitHistory;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.sluv.backoffice.domain.visitor.entity.VisitHistory;
+import com.sluv.backoffice.domain.visit.entity.VisitHistory;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

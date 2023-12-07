@@ -1,7 +1,7 @@
-package com.sluv.backoffice.domain.visitor.controller;
+package com.sluv.backoffice.domain.visit.controller;
 
-import com.sluv.backoffice.domain.visitor.dto.VisitHistoryCountResDto;
-import com.sluv.backoffice.domain.visitor.service.VisitHistoryService;
+import com.sluv.backoffice.domain.visit.dto.VisitHistoryCountResDto;
+import com.sluv.backoffice.domain.visit.service.VisitHistoryService;
 import com.sluv.backoffice.global.common.response.SuccessDataResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;

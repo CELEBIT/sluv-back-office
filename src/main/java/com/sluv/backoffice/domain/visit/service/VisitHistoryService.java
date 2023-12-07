@@ -1,10 +1,10 @@
-package com.sluv.backoffice.domain.visitor.service;
+package com.sluv.backoffice.domain.visit.service;
 
-import com.sluv.backoffice.domain.visitor.dto.VisitHistoryCountResDto;
-import com.sluv.backoffice.domain.visitor.entity.DailyVisit;
-import com.sluv.backoffice.domain.visitor.entity.VisitHistory;
-import com.sluv.backoffice.domain.visitor.repository.DailyVisitRepository;
-import com.sluv.backoffice.domain.visitor.repository.VisitHistoryRepository;
+import com.sluv.backoffice.domain.visit.dto.VisitHistoryCountResDto;
+import com.sluv.backoffice.domain.visit.entity.DailyVisit;
+import com.sluv.backoffice.domain.visit.entity.VisitHistory;
+import com.sluv.backoffice.domain.visit.repository.DailyVisitRepository;
+import com.sluv.backoffice.domain.visit.repository.VisitHistoryRepository;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;

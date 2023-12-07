@@ -1,4 +1,4 @@
-package com.sluv.backoffice.domain.visitor.dto;
+package com.sluv.backoffice.domain.visit.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
