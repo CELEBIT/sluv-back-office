@@ -3,7 +3,7 @@ package com.sluv.backoffice.domain.item.repository.impl;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.sluv.backoffice.domain.item.dto.ItemReportInfoDto;
+import com.sluv.backoffice.domain.item.dto.*;
 import com.sluv.backoffice.domain.user.entity.QUser;
 import com.sluv.backoffice.global.common.enums.ReportStatus;
 import lombok.RequiredArgsConstructor;

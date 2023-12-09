@@ -1,5 +1,6 @@
 package com.sluv.backoffice.domain.item.controller;
 
+import com.sluv.backoffice.domain.item.dto.ItemReportDetailDto;
 import com.sluv.backoffice.domain.item.dto.ItemReportInfoDto;
 import com.sluv.backoffice.domain.item.dto.UpdateItemReportResDto;
 import com.sluv.backoffice.domain.item.service.ItemReportService;
@@ -38,6 +39,22 @@ public class ItemController {
                                                                                                      @RequestParam(required = false) ReportStatus reportStatus) {
         return ResponseEntity.ok().body(SuccessDataResponse.<PaginationResDto<ItemReportInfoDto>>builder()
                 .result(itemReportService.getAllItemReport(pageable, reportStatus))
+                .build());
+    }
+
+    @Operation(
+            summary = "아이템 신고 상세 정보 조히",
+            description = "아이템 신고 id를 통해 아이템 신고 상세 정보 조회"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "1000", description = "요청성공"),
+            @ApiResponse(responseCode = "5000", description = "서버내부 에러", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "5001", description = "DB 에러", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    @GetMapping("/report/{itemReportId}")
+    public ResponseEntity<SuccessDataResponse<ItemReportDetailDto>> getItemReportDetail(@PathVariable Long itemReportId) {
+        return ResponseEntity.ok().body(SuccessDataResponse.<ItemReportDetailDto>builder()
+                .result(itemReportService.getItemReportDetail(itemReportId))
                 .build());
     }
 

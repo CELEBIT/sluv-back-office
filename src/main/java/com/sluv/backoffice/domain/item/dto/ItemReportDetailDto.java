@@ -26,16 +26,15 @@ public class ItemReportDetailDto {
     private String content;
     @Schema(description = "신고 접수 상태")
     private ReportStatus reportStatus;
-
     @Schema(description = "item 이미지 리스트")
     private List<ItemImgResDto> imgList;
     @Schema(description = "item 링크 리스트")
     private List<ItemLinkResDto> linkList;
     private CelebSearchResDto celeb;
     private BrandSearchResDto brand;
+    private ItemCategoryDto category;
     @Schema(description = "추가정보")
     private String additional_info;
-    private ItemCategoryDto category;
     private String color;
     private String name;
     private Integer price;
@@ -43,8 +42,38 @@ public class ItemReportDetailDto {
     private LocalDateTime whenDiscovery;
     @Schema(description = "발견 장소")
     private String whereDiscovery;
-
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
+    public static ItemReportDetailDto of(Long reporterId, String reporterNickname, Long reportedId,
+                                         String reportedNickname, Long reportId, ItemReportReason reportReason,
+                                         String content, ReportStatus reportStatus, List<ItemImgResDto> imgList,
+                                         List<ItemLinkResDto> linkList, CelebSearchResDto celeb, BrandSearchResDto brand,
+                                         ItemCategoryDto category, String additional_info, String color, String name,
+                                         Integer price, LocalDateTime whenDiscovery, String whereDiscovery,
+                                         LocalDateTime createdAt, LocalDateTime updatedAt) {
+        return new ItemReportDetailDto(
+            reporterId,
+            reporterNickname,
+            reportedId,
+            reportedNickname,
+            reportId,
+            reportReason,
+            content,
+            reportStatus,
+            imgList,
+            linkList,
+            celeb,
+            brand,
+            category,
+            additional_info,
+            color,
+            name,
+            price,
+            whenDiscovery,
+            whereDiscovery,
+            createdAt,
+            updatedAt
+        );
+    }
 }
