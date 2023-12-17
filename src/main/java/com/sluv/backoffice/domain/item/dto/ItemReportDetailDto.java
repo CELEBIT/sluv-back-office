@@ -45,35 +45,4 @@ public class ItemReportDetailDto {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public static ItemReportDetailDto of(Long reporterId, String reporterNickname, Long reportedId,
-                                         String reportedNickname, Long reportId, ItemReportReason reportReason,
-                                         String content, ReportStatus reportStatus, List<ItemImgResDto> imgList,
-                                         List<ItemLinkResDto> linkList, CelebSearchResDto celeb, BrandSearchResDto brand,
-                                         ItemCategoryDto category, String additional_info, String color, String name,
-                                         Integer price, LocalDateTime whenDiscovery, String whereDiscovery,
-                                         LocalDateTime createdAt, LocalDateTime updatedAt) {
-        return new ItemReportDetailDto(
-            reporterId,
-            reporterNickname,
-            reportedId,
-            reportedNickname,
-            reportId,
-            reportReason,
-            content,
-            reportStatus,
-            imgList,
-            linkList,
-            celeb,
-            brand,
-            category,
-            additional_info,
-            color,
-            name,
-            price,
-            whenDiscovery,
-            whereDiscovery,
-            createdAt,
-            updatedAt
-        );
-    }
 }
