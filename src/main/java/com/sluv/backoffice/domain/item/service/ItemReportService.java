@@ -1,11 +1,10 @@
 package com.sluv.backoffice.domain.item.service;
 
-import com.sluv.backoffice.domain.item.dto.ItemReportInfoDto;
-import com.sluv.backoffice.domain.item.dto.UpdateItemReportResDto;
+import com.sluv.backoffice.domain.item.dto.*;
+import com.sluv.backoffice.domain.item.repository.*;
 import com.sluv.backoffice.domain.item.entity.ItemReport;
 import com.sluv.backoffice.domain.item.enums.ItemStatus;
 import com.sluv.backoffice.domain.item.exception.ItemReportNotFoundException;
-import com.sluv.backoffice.domain.item.repository.ItemReportRepository;
 import com.sluv.backoffice.domain.user.entity.User;
 import com.sluv.backoffice.domain.user.exception.InvalidReportStatusException;
 import com.sluv.backoffice.global.common.enums.ReportStatus;
@@ -34,6 +33,13 @@ public class ItemReportService {
                 .page(itemReport.getNumber())
                 .content(itemReport.getContent())
                 .build();
+    }
+
+    @Transactional(readOnly = true)
+    public ItemReportDetailDto getItemReportDetail(Long itemReportId) {
+
+        return itemReportRepository.getItemReportDetail(itemReportId);
+
     }
 
     public UpdateItemReportResDto updateItemReportStatus(Long itemReportId, ReportStatus reportStatus) {
